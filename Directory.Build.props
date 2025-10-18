@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <TargetFramework>net8.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- StyleCop Analyzer for all projects -->
+    <PackageReference Include="StyleCop.Analyzers" />
+
+    <!-- Optional: Include stylecop.json as analyzer config -->
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Make only StyleCop warnings error-level (optional) -->
+    <WarningsAsErrors>SA*</WarningsAsErrors>
+    <NoWarn>NU1900</NoWarn>
+  </PropertyGroup>
+</Project>

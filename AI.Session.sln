@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TextBasedApp", "TextBasedApp", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI.Session.TextApp", "AI.Session.TextApp\AI.Session.TextApp.csproj", "{D9CAB898-E0B9-4F5F-8B04-6F6B5168F214}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9CAB898-E0B9-4F5F-8B04-6F6B5168F214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9CAB898-E0B9-4F5F-8B04-6F6B5168F214}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9CAB898-E0B9-4F5F-8B04-6F6B5168F214}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9CAB898-E0B9-4F5F-8B04-6F6B5168F214}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D9CAB898-E0B9-4F5F-8B04-6F6B5168F214} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {78D61256-F2E9-4B69-9589-BCB4B861599E}
+	EndGlobalSection
+EndGlobal
