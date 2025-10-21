@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------
-// <copyright file="ITextService.cs" company="Kanhaya Tyagi">
+// <copyright file="IChatService.cs" company="Kanhaya Tyagi">
 // Copyright 2025 kanhaiyatyagi63 All rights reserved.
 // </copyright>
 // -------------------------------------------------------------------
@@ -13,7 +13,7 @@ namespace AI.Session.TextApp.Services.Abstracts;
 /// user-provided prompts. Implementations are expected to process the input prompt, interact with a chat client, and
 /// log the results. Ensure that all dependencies required by the implementation are properly configured before invoking
 /// its methods.</remarks>
-internal interface ITextService
+internal interface IChatService
 {
     /// <summary>
     /// Executes an asynchronous operation to process a user-provided prompt and log the response.

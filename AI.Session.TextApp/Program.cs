@@ -4,6 +4,7 @@
 // </copyright>
 // -------------------------------------------------------------------
 
+using AI.Session.TextApp;
 using AI.Session.TextApp.Factory;
 using AI.Session.TextApp.Factory.Abstracts;
 using AI.Session.TextApp.Options;
@@ -22,20 +23,23 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.Configure<LangModelOptions>(context.Configuration.GetSection(LangModelOptions.SectionName));
 
-        services.AddScoped<IPublisherFactory, PublisherFactory>();
+        services.AddScoped<IPlatformFactory, PlatformFactory>();
 
-        //services.AddScoped<ITextService, ChatCompletionService>();
-        // services.AddScoped<ITextService, ChatStreamingService>();
-        // services.AddScoped<ITextService, ChatClassificationService>();
-        //services.AddScoped<ITextService, ChatSummarizationService>();
-        //services.AddScoped<ITextService, ChatSentimentAnalysisService>();
-        //services.AddScoped<ITextService, ChatStructuredOutputService>();
-        services.AddScoped<ITextService, ChatService>();
+        //services.AddScoped<IChatService, ChatCompletionService>();
+        // services.AddScoped<IChatService, ChatStreamingService>();
+        // services.AddScoped<IChatService, ChatClassificationService>();
+        //services.AddScoped<IChatService, ChatSummarizationService>();
+        //services.AddScoped<IChatService, ChatSentimentAnalysisService>();
+        //services.AddScoped<IChatService, ChatStructuredOutputService>();
+        services.AddScoped<IChatService, ChatService>();
+        services.AddScoped<IMovieService, MovieService>();
+        services.AddSingleton<VectorStore>();
     })
     .Build();
 
-var textService = host.Services.GetRequiredService<ITextService>();
-
-await textService.ExecuteAsync("What is microservice in 200 words.");
+// var chatService = host.Services.GetRequiredService<IChatService>();
+// await chatService.ExecuteAsync("What is microservice in 200 words.");
+var movieService = host.Services.GetRequiredService<IMovieService>();
+await movieService.ExecuteAsync();
 
 await host.RunAsync();

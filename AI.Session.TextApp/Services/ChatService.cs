@@ -15,13 +15,13 @@ namespace AI.Session.TextApp.Services;
 /// Provides functionality for executing chat-based operations using a prompt.
 /// </summary>
 /// <remarks>This service logs the input prompt, sends it to a chat client for processing, and logs the response
-/// along with token usage statistics. It relies on an <see cref="IPublisherFactory"/> to obtain the chat client and an
+/// along with token usage statistics. It relies on an <see cref="IPlatformFactory"/> to obtain the chat client and an
 /// <see cref="ILogger{TCategoryName}"/> for logging.</remarks>
 internal class ChatService(ILogger<ChatService> logger,
-    IPublisherFactory publisherFactory) : ITextService
+    IPlatformFactory platformFactory) : IChatService
 {
     private readonly ILogger<ChatService> _logger = logger;
-    private readonly IPublisherFactory _publisherFactory = publisherFactory;
+    private readonly IPlatformFactory _platformFactory = platformFactory;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync(string prompt)
@@ -39,7 +39,7 @@ internal class ChatService(ILogger<ChatService> logger,
                 "reasons for visiting, ideal travel times, and estimated costs."
             ),
         ];
-        var chatClient = _publisherFactory.GetChatClient();
+        var chatClient = _platformFactory.GetChatClient();
 
         while (true)
         {

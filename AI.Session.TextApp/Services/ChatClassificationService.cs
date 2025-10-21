@@ -13,15 +13,15 @@ namespace AI.Session.TextApp.Services;
 
 /// <summary>
 /// Provides functionality for processing chat prompts and streaming responses using a chat client obtained from a
-/// publisher factory.
+/// platform factory.
 /// </summary>
 /// <remarks>This service logs the input prompt and the streaming response updates for diagnostic purposes. It
 /// requires a valid prompt to execute.</remarks>
 internal class ChatClassificationService(ILogger<ChatClassificationService> logger,
-    IPublisherFactory publisherFactory) : ITextService
+    IPlatformFactory platformFactory) : IChatService
 {
     private readonly ILogger<ChatClassificationService> _logger = logger;
-    private readonly IPublisherFactory _publisherFactory = publisherFactory;
+    private readonly IPlatformFactory _platformFactory = platformFactory;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync(string prompt)
@@ -39,7 +39,7 @@ internal class ChatClassificationService(ILogger<ChatClassificationService> logg
 
         _logger.LogInformation("User ->>> {Prompt}", prompt);
 
-        var chatClient = _publisherFactory.GetChatClient();
+        var chatClient = _platformFactory.GetChatClient();
 
         var chatResponse = chatClient.GetStreamingResponseAsync(prompt);
 

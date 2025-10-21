@@ -18,13 +18,13 @@ namespace AI.Session.TextApp.Services;
 /// Provides functionality for processing and generating structured output from chat-based text input.
 /// </summary>
 /// <remarks>This service is intended to handle chat-related text processing tasks, ensuring that the output
-/// adheres to a structured format. It implements the <see cref="ITextService"/> interface, which defines the contract
+/// adheres to a structured format. It implements the <see cref="IChatService"/> interface, which defines the contract
 /// for text-related operations.</remarks>
 internal class ChatStructuredOutputService(ILogger<ChatStructuredOutputService> logger,
-    IPublisherFactory publisherFactory) : ITextService
+    IPlatformFactory platformFactory) : IChatService
 {
     private readonly ILogger<ChatStructuredOutputService> _logger = logger;
-    private readonly IPublisherFactory _publisherFactory = publisherFactory;
+    private readonly IPlatformFactory _platformFactory = platformFactory;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync(string prompt)
@@ -41,7 +41,7 @@ internal class ChatStructuredOutputService(ILogger<ChatStructuredOutputService> 
 
         _logger.LogInformation("User ->>> {Prompt}", prompt);
 
-        var chatClient = _publisherFactory.GetChatClient();
+        var chatClient = _platformFactory.GetChatClient();
 
         var chatResponse = await chatClient.GetResponseAsync<List<Product>>(prompt, new ChatOptions()
         {

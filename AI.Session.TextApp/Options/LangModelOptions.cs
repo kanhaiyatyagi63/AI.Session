@@ -7,7 +7,7 @@
 namespace AI.Session.TextApp.Options;
 
 /// <summary>
-/// Represents configuration options for language model publishers.
+/// Represents configuration options for language model platforms.
 /// </summary>
 public class LangModelOptions
 {
@@ -17,7 +17,12 @@ public class LangModelOptions
     public const string SectionName = "LangModel";
 
     /// <summary>
-    /// Gets or sets the array of publisher options for language models.
+    /// Gets or sets the array of platform options for chat models.
     /// </summary>
-    public PublisherOptions[] Publishers { get; set; } = [];
+    public PlatformOptions[] ChatModel { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets the array of platform options for text models.
+    /// </summary>
+    public PlatformOptions[] TextModel { get; set; } = [];
 }

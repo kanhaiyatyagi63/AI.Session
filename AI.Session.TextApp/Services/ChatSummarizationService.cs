@@ -17,10 +17,10 @@ namespace AI.Session.TextApp.Services;
 /// <remarks>This service processes a given text prompt and generates a summarized response using a chat client.
 /// If the provided prompt is null or empty, a default summarization prompt is used.</remarks>
 internal class ChatSummarizationService(ILogger<ChatSummarizationService> logger,
-    IPublisherFactory publisherFactory) : ITextService
+    IPlatformFactory platformFactory) : IChatService
 {
     private readonly ILogger<ChatSummarizationService> _logger = logger;
-    private readonly IPublisherFactory _publisherFactory = publisherFactory;
+    private readonly IPlatformFactory _platformFactory = platformFactory;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync(string prompt)
@@ -44,7 +44,7 @@ internal class ChatSummarizationService(ILogger<ChatSummarizationService> logger
 
         _logger.LogInformation("User ->>> {Prompt}", prompt);
 
-        var chatClient = _publisherFactory.GetChatClient();
+        var chatClient = _platformFactory.GetChatClient();
 
         var chatResponse = chatClient.GetStreamingResponseAsync(prompt);
 
