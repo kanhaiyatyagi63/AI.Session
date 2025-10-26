@@ -18,10 +18,10 @@ namespace AI.Session.TextApp.Services;
 /// along with token usage statistics. It relies on an <see cref="IPlatformFactory"/> to obtain the chat client and an
 /// <see cref="ILogger{TCategoryName}"/> for logging.</remarks>
 internal class ChatService(ILogger<ChatService> logger,
-    IPlatformFactory platformFactory) : IChatService
+    IChatClient chatClient) : IChatService
 {
     private readonly ILogger<ChatService> _logger = logger;
-    private readonly IPlatformFactory _platformFactory = platformFactory;
+    private readonly IChatClient _chatClient = chatClient;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync(string prompt)
@@ -39,7 +39,6 @@ internal class ChatService(ILogger<ChatService> logger,
                 "reasons for visiting, ideal travel times, and estimated costs."
             ),
         ];
-        var chatClient = _platformFactory.GetChatClient();
 
         while (true)
         {
@@ -55,7 +54,7 @@ internal class ChatService(ILogger<ChatService> logger,
             chatHistory.Add(new ChatMessage(ChatRole.User, input));
             var response = "";
 
-            await foreach (var item in chatClient.GetStreamingResponseAsync(chatHistory))
+            await foreach (var item in _chatClient.GetStreamingResponseAsync(chatHistory))
             {
                 Console.Write(item.Text);
                 response += item.Text;

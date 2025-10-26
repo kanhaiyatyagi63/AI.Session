@@ -19,10 +19,10 @@ namespace AI.Session.TextApp.Services;
 /// along with token usage statistics. It ensures that the provided prompt is not null or empty before
 /// processing.</remarks>
 internal class ChatStreamingService(ILogger<ChatStreamingService> logger,
-    IPlatformFactory platformFactory) : IChatService
+    IChatClient chatClient) : IChatService
 {
     private readonly ILogger<ChatStreamingService> _logger = logger;
-    private readonly IPlatformFactory _platformFactory = platformFactory;
+    private readonly IChatClient _chatClient = chatClient;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync(string prompt)
@@ -34,9 +34,7 @@ internal class ChatStreamingService(ILogger<ChatStreamingService> logger,
 
         _logger.LogInformation("User ->>> {Prompt}", prompt);
 
-        var chatClient = _platformFactory.GetChatClient();
-
-        var chatResponse = chatClient.GetStreamingResponseAsync(prompt);
+        var chatResponse = _chatClient.GetStreamingResponseAsync(prompt);
 
         _logger.LogInformation("Chat Response ->>>");
 

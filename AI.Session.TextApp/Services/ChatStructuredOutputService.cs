@@ -21,10 +21,10 @@ namespace AI.Session.TextApp.Services;
 /// adheres to a structured format. It implements the <see cref="IChatService"/> interface, which defines the contract
 /// for text-related operations.</remarks>
 internal class ChatStructuredOutputService(ILogger<ChatStructuredOutputService> logger,
-    IPlatformFactory platformFactory) : IChatService
+    IChatClient chatClient) : IChatService
 {
     private readonly ILogger<ChatStructuredOutputService> _logger = logger;
-    private readonly IPlatformFactory _platformFactory = platformFactory;
+    private readonly IChatClient _chatClient = chatClient;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync(string prompt)
@@ -41,9 +41,7 @@ internal class ChatStructuredOutputService(ILogger<ChatStructuredOutputService> 
 
         _logger.LogInformation("User ->>> {Prompt}", prompt);
 
-        var chatClient = _platformFactory.GetChatClient();
-
-        var chatResponse = await chatClient.GetResponseAsync<List<Product>>(prompt, new ChatOptions()
+        var chatResponse = await _chatClient.GetResponseAsync<List<Product>>(prompt, new ChatOptions()
         {
             Instructions = "Please provide the output in a well-structured JSON format as  a list same as this" +
            @"{

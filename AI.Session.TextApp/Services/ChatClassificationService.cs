@@ -18,10 +18,10 @@ namespace AI.Session.TextApp.Services;
 /// <remarks>This service logs the input prompt and the streaming response updates for diagnostic purposes. It
 /// requires a valid prompt to execute.</remarks>
 internal class ChatClassificationService(ILogger<ChatClassificationService> logger,
-    IPlatformFactory platformFactory) : IChatService
+    IChatClient chatClient) : IChatService
 {
     private readonly ILogger<ChatClassificationService> _logger = logger;
-    private readonly IPlatformFactory _platformFactory = platformFactory;
+    private readonly IChatClient _chatClient = chatClient;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync(string prompt)
@@ -39,9 +39,7 @@ internal class ChatClassificationService(ILogger<ChatClassificationService> logg
 
         _logger.LogInformation("User ->>> {Prompt}", prompt);
 
-        var chatClient = _platformFactory.GetChatClient();
-
-        var chatResponse = chatClient.GetStreamingResponseAsync(prompt);
+        var chatResponse = _chatClient.GetStreamingResponseAsync(prompt);
 
         _logger.LogInformation("Chat Response ->>>");
 

@@ -17,10 +17,10 @@ namespace AI.Session.TextApp.Services;
 /// <remarks>This service is designed to handle operations related to movies, such as retrieving, updating, or
 /// processing movie information.  It implements the <see cref="IMovieService"/> interface, indicating that it may also
 /// provide text-related services.</remarks>
-internal class MovieService(IPlatformFactory platformFactory, VectorStore vectorStore) : IMovieService
+internal class MovieService(IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator, VectorStore vectorStore) : IMovieService
 {
     private readonly VectorStore _vectorStore = vectorStore;
-    private readonly IEmbeddingGenerator<string, Embedding<float>> _embeddingGenerator = platformFactory.GetEmbeddingGenerator();
+    private readonly IEmbeddingGenerator<string, Embedding<float>> _embeddingGenerator = embeddingGenerator;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync()

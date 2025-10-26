@@ -35,12 +35,6 @@ internal class VectorStore
         _store.GetCollection<int, MovieModel>("movies");
 
     /// <summary>
-    /// Retrieves the in-memory vector store instance.
-    /// </summary>
-    /// <returns>The <see cref="InMemoryVectorStore"/> instance associated with the current context.</returns>
-    public InMemoryVectorStore GetStore() => _store;
-
-    /// <summary>
     /// Ensures that the movie collection is created and available in the in-memory vector store.
     /// </summary>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>

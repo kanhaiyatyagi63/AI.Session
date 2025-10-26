@@ -18,10 +18,10 @@ namespace AI.Session.TextApp.Services;
 /// <remarks>This service is designed to handle user prompts, log the input and output, and stream responses from
 /// a chat client obtained via the provided <see cref="IPlatformFactory"/>.</remarks>
 internal class ChatSentimentAnalysisService(ILogger<ChatSentimentAnalysisService> logger,
-    IPlatformFactory platformFactory) : IChatService
+    IChatClient chatClient) : IChatService
 {
     private readonly ILogger<ChatSentimentAnalysisService> _logger = logger;
-    private readonly IPlatformFactory _platformFactory = platformFactory;
+    private readonly IChatClient _chatClient = chatClient;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync(string prompt)
@@ -39,9 +39,7 @@ internal class ChatSentimentAnalysisService(ILogger<ChatSentimentAnalysisService
 
         _logger.LogInformation("User ->>> {Prompt}", prompt);
 
-        var chatClient = _platformFactory.GetChatClient();
-
-        var chatResponse = chatClient.GetStreamingResponseAsync(prompt);
+        var chatResponse = _chatClient.GetStreamingResponseAsync(prompt);
 
         _logger.LogInformation("Chat Response ->>>");
 

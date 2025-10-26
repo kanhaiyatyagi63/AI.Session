@@ -18,11 +18,10 @@ namespace AI.Session.TextApp.Services;
 /// <remarks>This service is designed to facilitate chat-based workflows by integrating with a chat client
 /// obtained from an <see cref="IPlatformFactory"/>. It logs user prompts, retrieves responses from the chat client,
 /// and logs relevant details such as token usage.</remarks>
-internal class ChatCompletionService(ILogger<ChatCompletionService> logger,
-    IPlatformFactory platformFactory) : IChatService
+internal class ChatCompletionService(ILogger<ChatCompletionService> logger, IChatClient chatClient) : IChatService
 {
     private readonly ILogger<ChatCompletionService> _logger = logger;
-    private readonly IPlatformFactory _platformFactory = platformFactory;
+    private readonly IChatClient _chatClient = chatClient;
 
     /// <inheritdoc/>
     public async Task ExecuteAsync(string prompt)
@@ -34,9 +33,7 @@ internal class ChatCompletionService(ILogger<ChatCompletionService> logger,
 
         _logger.LogInformation("User ->>> {Prompt}", prompt);
 
-        var chatClient = _platformFactory.GetChatClient();
-
-        var chatResponse = await chatClient.GetResponseAsync(prompt);
+        var chatResponse = await _chatClient.GetResponseAsync(prompt);
 
         _logger.LogInformation("Chat Response ->>> {ChatResponse}", chatResponse);
 

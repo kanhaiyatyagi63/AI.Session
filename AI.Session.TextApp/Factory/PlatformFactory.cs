@@ -39,7 +39,7 @@ public class PlatformFactory(IOptions<LangModelOptions> langModelOptions) : IPla
         switch (platform.Name)
         {
             case PlatformType.Ollama:
-                return new OllamaApiClient(new Uri(platform.Url), platform.Model);
+                return  new OllamaApiClient(new Uri(platform.Url), platform.Model);
 
             case PlatformType.GitHub:
 
@@ -50,7 +50,10 @@ public class PlatformFactory(IOptions<LangModelOptions> langModelOptions) : IPla
 
                 var client = new OpenAIClient(new ApiKeyCredential(platform.ApiKey!), options)
                     .GetChatClient(platform.Model)
-                    .AsIChatClient();
+                    .AsIChatClient()
+                    .AsBuilder()
+                    .UseFunctionInvocation()
+                    .Build();
 
                 return client;
             case PlatformType.OpenAI:
@@ -93,8 +96,7 @@ public class PlatformFactory(IOptions<LangModelOptions> langModelOptions) : IPla
 
                 return client;
             case PlatformType.Ollama:
-                // Return an instance of Ollama embedding generator
-                throw new NotImplementedException("Ollama embedding generator is not implemented yet.");
+               return  new OllamaApiClient(new Uri(platform.Url), platform.Model);
             case PlatformType.OpenAI:
                 // Return an instance of OpenAI embedding generator
                 throw new NotImplementedException("OpenAI embedding generator is not implemented yet.");
