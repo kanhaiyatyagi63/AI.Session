@@ -36,7 +36,7 @@ internal class ChatFunctionService(ILogger<ChatFunctionService> logger, IChatCli
             ToolMode = ChatToolMode.Auto,
         };
 
-        List<ChatMessage> chatHistory = new();
+        List<ChatMessage> chatHistory = [];
 
         while (true)
         {

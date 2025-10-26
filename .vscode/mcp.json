@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "AI.Session.Mcp": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "C:\\Users\\kanhaya.tyagi\\Desktop\\Session\\AI.Session\\AI.Session.Mcp\\AI.Session.Mcp.csproj"
+      ]
+    }
+  }
+}
