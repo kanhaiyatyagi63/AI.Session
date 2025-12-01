@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------
-// <copyright file="PlatformFactory.cs" company="Kanhaya Tyagi">
+// <copyright file="InternalClientFactory.cs" company="Kanhaya Tyagi">
 // Copyright 2025 kanhaiyatyagi63 All rights reserved.
 // </copyright>
 // -------------------------------------------------------------------
@@ -21,7 +21,7 @@ namespace AI.Session.TextApp.Factory;
 /// </summary>
 /// <remarks>This class serves as a central point for constructing and configuring LLM instances.  Use this
 /// factory to ensure consistent initialization and management of LLM resources.</remarks>
-public class PlatformFactory(IOptions<LangModelOptions> langModelOptions) : IPlatformFactory
+public class InternalClientFactory(IOptions<LangModelOptions> langModelOptions) : IInternalClientFactory
 {
     private readonly LangModelOptions _langModelOptions = langModelOptions.Value;
 

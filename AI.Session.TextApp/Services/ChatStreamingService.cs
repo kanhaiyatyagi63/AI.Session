@@ -37,10 +37,37 @@ internal class ChatStreamingService(ILogger<ChatStreamingService> logger,
         var chatResponse = _chatClient.GetStreamingResponseAsync(prompt);
 
         _logger.LogInformation("Chat Response ->>>");
+        UsageDetails? usageDetails = null;
 
         await foreach (var chatResponseUpdate in chatResponse)
         {
             Console.Write(chatResponseUpdate);
+            
+            var usage = chatResponseUpdate.Contents.OfType<UsageContent>().FirstOrDefault()?.Details;
+            if (usage != null)
+            {
+                usageDetails = usage;
+            }
+        }
+
+        ShowUsageDetails(usageDetails);
+    }
+
+    private static void ShowUsageDetails(UsageDetails? usage)
+    {
+        if (usage != null)
+        {
+            Console.WriteLine($"   InputTokenCount: {usage.InputTokenCount}");
+            Console.WriteLine($"   OutputTokenCount: {usage.OutputTokenCount}");
+            Console.WriteLine($"   TotalTokenCount: {usage.TotalTokenCount}");
+
+            if (usage.AdditionalCounts != null)
+            {
+                foreach (var additionalCount in usage.AdditionalCounts)
+                {
+                    Console.WriteLine($"  {additionalCount.Key}: {additionalCount.Value}");
+                }
+            }
         }
     }
 }

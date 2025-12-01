@@ -13,37 +13,37 @@ namespace AI.Session.RAG.Services;
 /// </summary>
 public class IngestedDocument
 {
-    private const int VectorDimensions = 2;
-    private const string VectorDistanceFunction = DistanceFunction.CosineDistance;
+    private const int _vectorDimensions = 2;
+    private const string _vectorDistanceFunction = DistanceFunction.CosineDistance;
 
     /// <summary>
     /// Gets or sets the unique key for the ingested document.
     /// </summary>
     [VectorStoreKey]
-    required public string Key { get; set; }
+    public required string Key { get; set; }
 
     /// <summary>
     /// Gets or sets the source identifier. This property is indexed.
     /// </summary>
     [VectorStoreData(IsIndexed = true)]
-    required public string SourceId { get; set; }
+    public required string SourceId { get; set; }
 
     /// <summary>
     /// Gets or sets the document identifier.
     /// </summary>
     [VectorStoreData]
-    required public string DocumentId { get; set; }
+    public required string DocumentId { get; set; }
 
     /// <summary>
     /// Gets or sets the document version.
     /// </summary>
     [VectorStoreData]
-    required public string DocumentVersion { get; set; }
+    public required string DocumentVersion { get; set; }
 
     /// <summary>
     /// Gets or sets the vector representation of the document.
     /// The vector is not used but required for some vector databases.
     /// </summary>
-    [VectorStoreVector(VectorDimensions, DistanceFunction = VectorDistanceFunction)]
+    [VectorStoreVector(_vectorDimensions, DistanceFunction = _vectorDistanceFunction)]
     public ReadOnlyMemory<float> Vector { get; set; } = new ReadOnlyMemory<float>([0, 0]);
 }

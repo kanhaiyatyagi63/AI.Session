@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using System.ComponentModel
+@using ModelContextProtocol.Client
 @inject IChatClient ChatClient
 @inject NavigationManager Nav
 @inject SemanticSearch Search
@@ -24,21 +25,23 @@
 </div>
 
 @code {
-    private const string SystemPrompt = @"
-        You are an assistant who answers questions about information you retrieve.
-        Do not answer questions about anything else.
-        Use only simple markdown to format your responses.
+    // private const string SystemPrompt = @"
+    //     You are an assistant who answers questions about information you retrieve.
+    //     Do not answer questions about anything else.
+    //     Use only simple markdown to format your responses.
 
-        Use the search tool to find relevant information. When you do this, end your
-        reply with citations in the special XML format:
+    //     Use the search tool to find relevant information. When you do this, end your
+    //     reply with citations in the special XML format:
 
-        <citation filename='string' page_number='number'>exact quote here</citation>
+    //     <citation filename='string' page_number='number'>exact quote here</citation>
 
-        Always include the citation in your response if there are results.
+    //     Always include the citation in your response if there are results.
 
-        The quote must be max 5 words, taken word-for-word from the search result, and is the basis for why the citation is relevant.
-        Don't refer to the presence of citations; just emit these tags right at the end, with no surrounding text.
-        ";
+    //     The quote must be max 5 words, taken word-for-word from the search result, and is the basis for why the citation is relevant.
+    //     Don't refer to the presence of citations; just emit these tags right at the end, with no surrounding text.
+    //     ";
+
+    private const string SystemPrompt = "Give everything what user wants but from the tools that you have";
 
     private int statefulMessageCount;
     private readonly ChatOptions chatOptions = new();
@@ -48,11 +51,34 @@
     private ChatInput? chatInput;
     private ChatSuggestions? chatSuggestions;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         statefulMessageCount = 0;
         messages.Add(new(ChatRole.System, SystemPrompt));
-        chatOptions.Tools = [AIFunctionFactory.Create(SearchAsync)];
+        var clientTransport = new StdioClientTransport(new()
+        {
+            Name = "AISessionMcp",
+            Command = "dotnet",
+            Arguments =
+            [
+                "run",
+            "--project",
+            "C:\\Users\\kanhaya.tyagi\\Desktop\\Session\\AI.Session\\AI.Session.Mcp\\AI.Session.Mcp.csproj"
+            ],
+        });
+
+        Console.WriteLine("Setting up stdio transport");
+
+        await using var mcpClient = await McpClient.CreateAsync(clientTransport);
+        var tools = await mcpClient.ListToolsAsync();
+
+        Console.WriteLine("Available tools:");
+        foreach (var tool in tools)
+        {
+            Console.WriteLine($"{tool.Name}: {tool.Description}");
+        }
+
+        chatOptions.Tools = [AIFunctionFactory.Create(SearchAsync), .. tools];
     }
 
     private async Task AddUserMessageAsync(ChatMessage userMessage)

@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------
-// <copyright file="IPlatformFactory.cs" company="Kanhaya Tyagi">
+// <copyright file="IInternalClientFactory.cs" company="Kanhaya Tyagi">
 // Copyright 2025 kanhaiyatyagi63 All rights reserved.
 // </copyright>
 // -------------------------------------------------------------------
@@ -14,7 +14,7 @@ namespace AI.Session.TextApp.Factory.Abstracts;
 /// <remarks>This interface provides methods to retrieve instances of platform-specific components, such as chat
 /// clients and embedding generator clients. Implementations of this interface are responsible for ensuring that the
 /// returned instances are properly configured and ready for use.</remarks>
-internal interface IPlatformFactory
+internal interface IInternalClientFactory
 {
     /// <summary>
     /// Retrieves an instance of the chat client.

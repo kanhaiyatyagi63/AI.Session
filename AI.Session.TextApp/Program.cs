@@ -24,35 +24,38 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.Configure<LangModelOptions>(context.Configuration.GetSection(LangModelOptions.SectionName));
 
-        services.AddScoped<IPlatformFactory, PlatformFactory>();
+        services.AddScoped<IInternalClientFactory, InternalClientFactory>();
 
         services.AddChatClient(x =>
         {
-            return x.GetRequiredService<IPlatformFactory>().GetChatClient();
+            return x.GetRequiredService<IInternalClientFactory>().GetChatClient();
         })
         .UseFunctionInvocation();
 
         services.AddEmbeddingGenerator(x =>
         {
-            return x.GetRequiredService<IPlatformFactory>().GetEmbeddingGenerator();
+            return x.GetRequiredService<IInternalClientFactory>().GetEmbeddingGenerator();
         });
 
         //services.AddScoped<IChatService, ChatCompletionService>();
-        // services.AddScoped<IChatService, ChatStreamingService>();
-        // services.AddScoped<IChatService, ChatClassificationService>();
+        //services.AddScoped<IChatService, ChatStreamingService>();
+        
+        //services.AddScoped<IChatService, ChatClassificationService>();
         //services.AddScoped<IChatService, ChatSummarizationService>();
         //services.AddScoped<IChatService, ChatSentimentAnalysisService>();
         //services.AddScoped<IChatService, ChatStructuredOutputService>();
         //services.AddScoped<IChatService, ChatService>();
-        services.AddScoped<IMovieService, MovieService>();
         
-        //services.AddScoped<IChatService, ChatFunctionService>();
+        //services.AddScoped<IChatService, ChatMcpService>();
+        //services.AddScoped<IMovieService, MovieService>();
+        services.AddScoped<IChatService, ChatFunctionService>();
         services.AddSingleton<VectorStore>();
     })
     .Build();
 
-//var chatService = host.Services.GetRequiredService<IChatService>();
-//await chatService.ExecuteAsync("Hello.");
-var movieService = host.Services.GetRequiredService<IMovieService>();
-await movieService.ExecuteAsync();
+var chatService = host.Services.GetRequiredService<IChatService>();
+await chatService.ExecuteAsync("What is the current temperature of meerut.");
+
+//var movieService = host.Services.GetRequiredService<IMovieService>();
+//await movieService.ExecuteAsync();
 await host.RunAsync();

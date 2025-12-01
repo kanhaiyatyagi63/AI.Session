@@ -9,11 +9,19 @@
 
   <ItemGroup>
     <PackageReference Include="OllamaSharp" />
-    <PackageReference Include="Microsoft.Extensions.AI"  />
-    <PackageReference Include="Microsoft.SemanticKernel.Core"  />
+    <PackageReference Include="Microsoft.Extensions.AI" />
+    <PackageReference Include="Microsoft.SemanticKernel.Core" />
     <PackageReference Include="PdfPig" />
     <PackageReference Include="System.Linq.Async" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" />
+    <PackageReference Include="ModelContextProtocol" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Components\App.razor">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

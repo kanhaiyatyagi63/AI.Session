@@ -15,7 +15,7 @@ namespace AI.Session.TextApp.Services;
 /// Provides functionality for executing chat-based operations using a prompt.
 /// </summary>
 /// <remarks>This service logs the input prompt, sends it to a chat client for processing, and logs the response
-/// along with token usage statistics. It relies on an <see cref="IPlatformFactory"/> to obtain the chat client and an
+/// along with token usage statistics. It relies on an <see cref="IInternalClientFactory"/> to obtain the chat client and an
 /// <see cref="ILogger{TCategoryName}"/> for logging.</remarks>
 internal class ChatService(ILogger<ChatService> logger,
     IChatClient chatClient) : IChatService

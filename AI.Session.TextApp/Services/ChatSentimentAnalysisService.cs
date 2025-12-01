@@ -16,7 +16,7 @@ namespace AI.Session.TextApp.Services;
 /// client.
 /// </summary>
 /// <remarks>This service is designed to handle user prompts, log the input and output, and stream responses from
-/// a chat client obtained via the provided <see cref="IPlatformFactory"/>.</remarks>
+/// a chat client obtained via the provided <see cref="IInternalClientFactory"/>.</remarks>
 internal class ChatSentimentAnalysisService(ILogger<ChatSentimentAnalysisService> logger,
     IChatClient chatClient) : IChatService
 {

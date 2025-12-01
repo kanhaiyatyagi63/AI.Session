@@ -14,20 +14,20 @@ namespace AI.Session.RAG.Services;
 /// </summary>
 public class IngestedChunk
 {
-    private const int VectorDimensions = 384; // 384 is the default vector size for the all-minilm embedding model
-    private const string VectorDistanceFunction = DistanceFunction.CosineDistance;
+    private const int _vectorDimensions = 384; // 384 is the default vector size for the all-minilm embedding model
+    private const string _vectorDistanceFunction = DistanceFunction.CosineDistance;
 
     /// <summary>
     /// Gets or sets the unique key for the chunk in the vector store.
     /// </summary>
     [VectorStoreKey]
-    required public string Key { get; set; }
+    public required string Key { get; set; }
 
     /// <summary>
     /// Gets or sets the document identifier this chunk belongs to.
     /// </summary>
     [VectorStoreData(IsIndexed = true)]
-    required public string DocumentId { get; set; }
+    public required string DocumentId { get; set; }
 
     /// <summary>
     /// Gets or sets the page number within the document for this chunk.
@@ -39,11 +39,11 @@ public class IngestedChunk
     /// Gets or sets the text content of the chunk.
     /// </summary>
     [VectorStoreData]
-    required public string Text { get; set; }
+    public required string Text { get; set; }
 
     /// <summary>
     /// Gets the vector representation of the chunk's text for similarity search.
     /// </summary>
-    [VectorStoreVector(VectorDimensions, DistanceFunction = VectorDistanceFunction)]
+    [VectorStoreVector(_vectorDimensions, DistanceFunction = _vectorDistanceFunction)]
     public string? Vector => Text;
 }
