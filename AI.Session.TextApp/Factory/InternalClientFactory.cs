@@ -50,10 +50,7 @@ public class InternalClientFactory(IOptions<LangModelOptions> langModelOptions) 
 
                 var client = new OpenAIClient(new ApiKeyCredential(platform.ApiKey!), options)
                     .GetChatClient(platform.Model)
-                    .AsIChatClient()
-                    .AsBuilder()
-                    .UseFunctionInvocation()
-                    .Build();
+                    .AsIChatClient();
 
                 return client;
             case PlatformType.OpenAI:

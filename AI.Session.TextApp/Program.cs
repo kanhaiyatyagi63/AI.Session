@@ -29,8 +29,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddChatClient(x =>
         {
             return x.GetRequiredService<IInternalClientFactory>().GetChatClient();
-        })
-        .UseFunctionInvocation();
+        });
 
         services.AddEmbeddingGenerator(x =>
         {
@@ -45,10 +44,10 @@ IHost host = Host.CreateDefaultBuilder(args)
         //services.AddScoped<IChatService, ChatSentimentAnalysisService>();
         //services.AddScoped<IChatService, ChatStructuredOutputService>();
         //services.AddScoped<IChatService, ChatService>();
+        services.AddScoped<IChatService, ChatMcpService>();
         
-        //services.AddScoped<IChatService, ChatMcpService>();
         //services.AddScoped<IMovieService, MovieService>();
-        services.AddScoped<IChatService, ChatFunctionService>();
+        //services.AddScoped<IChatService, ChatFunctionService>();
         services.AddSingleton<VectorStore>();
     })
     .Build();

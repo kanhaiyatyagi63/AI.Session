@@ -41,7 +41,7 @@ internal class ChatMcpService(ILogger<ChatMcpService> logger,
             [
                 "run",
             "--project",
-            "C:\\Users\\kanhaya.tyagi\\Desktop\\Session\\AI.Session\\AI.Session.Mcp\\AI.Session.Mcp.csproj"
+            "C:\\Users\\kanhaya.tyagi\\Desktop\\Session\\AI.Session\\AI.Session.Mcp"
             ],
         });
 
@@ -82,65 +82,87 @@ internal class ChatMcpService(ILogger<ChatMcpService> logger,
             try
             {
                 var assistantResponseBuilder = new StringBuilder();
+                var updates = new List<ChatResponseUpdate>();
 
                 await foreach (var item in _chatClient.GetStreamingResponseAsync(chatHistory, chatOptions))
                 {
-                    if (string.IsNullOrEmpty(item.Text))
-                    {
-                        continue;
-                    }
+                    updates.Add(item);
 
-                    if (item.Role == ChatRole.Assistant)
+                    // Display streaming text
+                    if (!string.IsNullOrEmpty(item.Text))
                     {
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write(item.Text);
                         assistantResponseBuilder.Append(item.Text);
-                        chatHistory.Add(new ChatMessage(ChatRole.Assistant, item.Text));
-                    }
-                    else if (item.Role == ChatRole.Tool)
-                    {
-                        foreach (var content in item.Contents)
-                        {
-                            if (content is FunctionResultContent resultContent)
-                            {
-                                // Skip if the assistant never requested a tool call
-                                if (string.IsNullOrEmpty(resultContent.CallId))
-                                {
-                                    continue;
-                                }
-
-                                // Extract the tool result safely
-                                string? result = resultContent.Result as string;
-                                if (result is null && resultContent.Result is not null)
-                                {
-                                    try
-                                    {
-                                        result = JsonSerializer.Serialize(resultContent.Result, ToolCallJsonSerializerOptions);
-                                    }
-                                    catch (NotSupportedException)
-                                    {
-                                    }
-                                }
-
-                                // ✅ Build a JSON structure manually that matches OpenAI’s expected format
-                                var toolResultPayload = JsonSerializer.Serialize(new
-                                {
-                                    tool_call_id = resultContent.CallId,
-                                    result,
-                                }, ToolCallJsonSerializerOptions);
-
-                                // ✅ Add tool result as a normal ChatMessage with ChatRole.Tool
-                                chatHistory.Add(new ChatMessage(ChatRole.Tool, toolResultPayload));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        chatHistory.Add(new ChatMessage(ChatRole.Assistant, item.Text));
                     }
 
                     Console.ResetColor();
                 }
+
+                // Collect all function calls from the streaming response
+                var functionCalls = updates
+                    .SelectMany(u => u.Contents)
+                    .OfType<FunctionCallContent>()
+                    .ToList();
+
+                if (functionCalls.Count != 0)
+                {
+                    // Build assistant message with proper structure for OpenAI
+                    var assistantContents = new List<AIContent>();
+                    
+                    // IMPORTANT: Include text content first (if any)
+                    if (assistantResponseBuilder.Length > 0)
+                    {
+                        assistantContents.Add(new TextContent(assistantResponseBuilder.ToString()));
+                    }
+                    
+                    // Then add all function calls
+                    assistantContents.AddRange(functionCalls);
+                    
+                    // Add complete assistant message with both text and tool_calls
+                    chatHistory.Add(new ChatMessage(ChatRole.Assistant, assistantContents));
+
+                    // Execute each MCP tool and add results
+                    foreach (var functionCall in functionCalls)
+                    {
+                        var args = functionCall.Arguments as IReadOnlyDictionary<string, object?> 
+                            ?? functionCall.Arguments?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value) as IReadOnlyDictionary<string, object?>
+                            ?? new Dictionary<string, object?>();
+
+                        var result = await mcpClient.CallToolAsync(functionCall.Name, args);
+
+                        // Add tool result message
+                        chatHistory.Add(new ChatMessage(
+                            ChatRole.Tool,
+                            [new FunctionResultContent(functionCall.CallId, result)]));
+                    }
+
+                    // Get AI's final response after tool execution
+                    Console.WriteLine();
+                    assistantResponseBuilder.Clear();
+                    
+                    await foreach (var item in _chatClient.GetStreamingResponseAsync(chatHistory, chatOptions))
+                    {
+                        if (!string.IsNullOrEmpty(item.Text))
+                        {
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write(item.Text);
+                            assistantResponseBuilder.Append(item.Text);
+                        }
+                    }
+
+                    if (assistantResponseBuilder.Length > 0)
+                    {
+                        chatHistory.Add(new ChatMessage(ChatRole.Assistant, assistantResponseBuilder.ToString()));
+                    }
+                }
+                else if (assistantResponseBuilder.Length > 0)
+                {
+                    // No tool calls - just add the text response
+                    chatHistory.Add(new ChatMessage(ChatRole.Assistant, assistantResponseBuilder.ToString()));
+                }
+
+                Console.WriteLine();
             }
             catch (Exception ex)
             {

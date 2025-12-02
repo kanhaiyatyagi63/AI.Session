@@ -28,10 +28,9 @@ internal class OrderTools(IOrderService orderService)
     /// orders.</returns>
     [McpServerTool(Name ="get_all_orders", ReadOnly = true, Title = "get_all_orders")]
     [Description("Get all the orders information.")]
-    public McpResponseModel<List<OrderModel>> GetAllOrders()
+    public List<OrderModel> GetAllOrders()
     {
-        var orders =  _orderService.GetAll();
-        return new McpResponseModel<List<OrderModel>>(orders, "get_all_orders");
+        return _orderService.GetAll();
     }
 
     /// <summary>

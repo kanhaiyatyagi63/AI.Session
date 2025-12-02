@@ -6,7 +6,6 @@
 
 using AI.Session.Mcp.Models;
 using AI.Session.Mcp.Services.Abstracts;
-using ModelContextProtocol.Server;
 
 namespace AI.Session.Mcp.Services;
 

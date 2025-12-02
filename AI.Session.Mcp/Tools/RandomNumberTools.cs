@@ -8,10 +8,13 @@ using System.ComponentModel;
 
 using ModelContextProtocol.Server;
 
+namespace AI.Session.Mcp.Tools;
+
 /// <summary>
 /// Sample MCP tools for demonstration purposes.
 /// These tools can be invoked by MCP clients to perform various operations.
 /// </summary>
+[McpServerToolType]
 internal class RandomNumberTools
 {
     /// <summary>
